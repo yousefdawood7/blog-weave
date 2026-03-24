@@ -1,8 +1,10 @@
 import express from "express";
 import helmet from "helmet";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +32,7 @@ app.post("/posts/:id/comments", (req, res) => {
     return res.status(400).send({
       code: 400,
       message: "Bad Request",
-      cause: "Contnet not provided",
+      cause: "Content not provided",
     });
 
   const comments = commentsByPostID[postID] ?? [];
