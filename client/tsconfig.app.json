@@ -24,6 +24,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
+    // Just for editor support, Vite will handle the actual path resolution
     "paths": {
       "@/*": ["./src/*"]
     }
