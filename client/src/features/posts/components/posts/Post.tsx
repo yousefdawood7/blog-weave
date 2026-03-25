@@ -8,13 +8,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import CommentsList from "@/features/posts/components/comments/CommentsList";
 import { useId } from "react";
 
 type PostProps = {
   id: string;
   title: string;
 };
-export default function Post({ id, title }: PostProps) {
+export default function Post({ title }: PostProps) {
   const commentID = useId();
 
   return (
@@ -23,7 +24,9 @@ export default function Post({ id, title }: PostProps) {
         <CardTitle className="text-lg">{title}</CardTitle>
       </CardHeader>
 
-      <CardContent>{/* LIST OF COMMENTS */}</CardContent>
+      <CardContent>
+        <CommentsList />
+      </CardContent>
 
       <CardFooter>
         <form className="w-full flex flex-col gap-5">
