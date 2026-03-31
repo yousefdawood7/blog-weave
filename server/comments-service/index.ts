@@ -39,8 +39,8 @@ app.post("/posts/:id/comments", async (req, res) => {
   const comments = commentsByPostID[postID] ?? [];
 
   const newCreatedComment = { id: crypto.randomUUID(), postID, content };
-  comments.push(newCreatedComment);
 
+  comments.push(newCreatedComment);
   commentsByPostID[postID] = comments;
 
   await axios.post("http://localhost:4005/event", {
