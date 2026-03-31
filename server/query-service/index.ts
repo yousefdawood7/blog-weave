@@ -16,6 +16,10 @@ app.use(express.urlencoded({ extended: true }));
 
 const posts: PostsType = {};
 
+app.get("/posts", (_req, res) => {
+  res.status(200).send({ status: 200, data: posts });
+});
+
 app.post("/event", (req, res) => {
   const { type, payload }: PostCreatedEvent | CommentCreatedEvent = req.body;
 
