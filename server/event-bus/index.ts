@@ -10,9 +10,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/event", (req, res) => {
-  axios.post("http://localhost:4000/event", req.body);
-  axios.post("http://localhost:4001/event", req.body);
+app.post("/event", async (req, res) => {
+  await Promise.all([
+    axios.post("http://localhost:4000/event", req.body),
+    axios.post("http://localhost:4001/event", req.body),
+  ]);
 
   res.send({ message: "Forwards event to all our services" });
 });
