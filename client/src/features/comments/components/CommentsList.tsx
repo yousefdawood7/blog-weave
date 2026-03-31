@@ -1,4 +1,4 @@
-import Comment from "@/features/posts/components/comments/Comment";
+import Comment from "@/features/comments/components/Comment";
 
 const comments = [
   {

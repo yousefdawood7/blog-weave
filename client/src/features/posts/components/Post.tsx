@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import CommentsList from "@/features/posts/components/comments/CommentsList";
+import CommentsList from "@/features/comments/components/CommentsList";
 import { useId } from "react";
 
 type PostProps = {

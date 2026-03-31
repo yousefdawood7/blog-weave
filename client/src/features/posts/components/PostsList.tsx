@@ -1,4 +1,4 @@
-import Post from "@/features/posts/components/posts/Post";
+import Post from "@/features/posts/components/Post";
 
 const posts = [
   {

@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
-import CreatePost from "@/features/posts/components/posts/CreatePost";
-import PostsList from "@/features/posts/components/posts/PostsList";
+import CreatePost from "@/features/posts/components/CreatePost";
+import PostsList from "@/features/posts/components/PostsList";
 
 export default function App() {
   return (
