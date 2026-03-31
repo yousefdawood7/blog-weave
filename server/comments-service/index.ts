@@ -45,6 +45,11 @@ app.post("/posts/:id/comments", (req, res) => {
   res.status(201).send(newCreatedComment);
 });
 
+app.post("/event", (req, res) => {
+  console.log("Comment-Service", req.body.title);
+  res.send({ message: "Comment-Service", type: req.body.title });
+});
+
 app.listen(4001, () => {
   console.log("Server is running on port 4001");
 });

@@ -33,6 +33,11 @@ app.post("/posts", (req, res) => {
   res.status(201).send(posts[createdPostID]);
 });
 
+app.post("/event", (req, res) => {
+  console.log("Post-Service", req.body.title);
+  res.send({ message: "Post-Service", type: req.body.title });
+});
+
 app.listen(4000, () => {
   console.log("Server is running on port 4000");
 });
