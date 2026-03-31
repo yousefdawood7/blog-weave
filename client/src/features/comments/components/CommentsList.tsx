@@ -1,29 +1,13 @@
-import Comment from "@/features/posts/components/comments/Comment";
+import Comment from "@/features/comments/components/Comment";
+import type { CommentType } from "@/features/posts/types";
 
-const comments = [
-  {
-    id: "1",
-    content: "Great post! Really helpful.",
-  },
-  {
-    id: "2",
-    content: "Thanks for sharing this insight.",
-  },
-  {
-    id: "3",
-    content: "Could you elaborate more on this?",
-  },
-  {
-    id: "4",
-    content: "Exactly what I was looking for!",
-  },
-  {
-    id: "5",
-    content: "Well written and informative.",
-  },
-];
+type CommentsListProps = CommentType;
 
-export default function CommentsList() {
+export default function CommentsList({
+  comments,
+}: {
+  comments: CommentsListProps[];
+}) {
   if (comments.length === 0) {
     return <h3 className="text-center">There are no comments yet.</h3>; // Don't render anything if there are no comments
   }
