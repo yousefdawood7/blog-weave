@@ -56,6 +56,7 @@ export default function Post({ id: postID, title, comments }: PostProps) {
             <Label htmlFor={commentID}>Comment</Label>
             <Input
               type="text"
+              id={commentID}
               placeholder="Write a comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
