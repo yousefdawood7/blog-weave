@@ -1,6 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
+import axios from "axios";
 
 const app = express();
 
@@ -42,12 +43,17 @@ app.post("/posts/:id/comments", (req, res) => {
 
   commentsByPostID[postID] = comments;
 
+  axios.post("http://localhost:4005/event", {
+    type: "CommentCreated",
+    payload: newCreatedComment,
+  });
+
   res.status(201).send(newCreatedComment);
 });
 
 app.post("/event", (req, res) => {
-  console.log("Comment-Service", req.body.title);
-  res.send({ message: "Comment-Service", type: req.body.title });
+  console.log("Comment-Service", req.body.type);
+  res.send({ message: "Comment-Service", type: req.body.type });
 });
 
 app.listen(4001, () => {
