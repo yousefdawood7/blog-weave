@@ -38,7 +38,7 @@ export default function CreatePost() {
           id={formID}
           onSubmit={(e) => {
             e.preventDefault();
-            createPostMutation(title);
+            createPostMutation({ title });
           }}
         >
           <p className="flex flex-col gap-2.5">
