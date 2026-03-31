@@ -1,6 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
+import axios from "axios";
 
 const app = express();
 
@@ -18,7 +19,7 @@ app.get("/posts", (_req, res) => {
   res.status(200).send(posts);
 });
 
-app.post("/posts", (req, res) => {
+app.post("/posts", async (req, res) => {
   const { title = null } = req.body ?? {};
 
   if (!title)
@@ -30,7 +31,17 @@ app.post("/posts", (req, res) => {
 
   posts[createdPostID] = { id: createdPostID, title };
 
+  await axios.post("http://localhost:4005/event", {
+    type: "PostCreated",
+    payload: posts[createdPostID],
+  });
+
   res.status(201).send(posts[createdPostID]);
+});
+
+app.post("/event", (req, res) => {
+  console.log("Post-Service", req.body.type);
+  res.send({ message: "Post-Service", type: req.body.type });
 });
 
 app.listen(4000, () => {
