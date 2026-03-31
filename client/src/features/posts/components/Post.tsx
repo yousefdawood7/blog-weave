@@ -9,13 +9,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import CommentsList from "@/features/comments/components/CommentsList";
+import type { CommentType } from "@/features/posts/types";
 import { useId } from "react";
 
 type PostProps = {
   id: string;
   title: string;
+  comments: CommentType[];
 };
-export default function Post({ title }: PostProps) {
+
+export default function Post({ title, comments }: PostProps) {
   const commentID = useId();
 
   return (
@@ -25,7 +28,7 @@ export default function Post({ title }: PostProps) {
       </CardHeader>
 
       <CardContent>
-        <CommentsList />
+        <CommentsList comments={comments} />
       </CardContent>
 
       <CardFooter>
