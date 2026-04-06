@@ -10,21 +10,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { createPost } from "@/features/posts/services/createPost";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useId, useState } from "react";
 
 export default function CreatePost() {
   const formID = useId();
   const post = useId();
   const [title, setTitle] = useState<string>("");
-  const queryClient = useQueryClient();
 
   const { mutate: createPostMutation, isPending } = useMutation({
     mutationFn: createPost,
-    onSuccess: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
-      await queryClient.invalidateQueries();
-    },
   });
 
   return (

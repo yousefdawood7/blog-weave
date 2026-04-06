@@ -7,6 +7,7 @@ export default function PostsList() {
   const { data: posts, isPending } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchAllPosts,
+    refetchInterval: 1000,
   });
 
   if (isPending)

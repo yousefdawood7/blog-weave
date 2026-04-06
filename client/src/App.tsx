@@ -6,7 +6,7 @@ export default function App() {
   return (
     <main className="flex flex-col items-center justify-start p-5 min-h-svh gap-4">
       <CreatePost />
-      <Separator />
+      <Separator className="w-full h-0.5" />
       <PostsList />
     </main>
   );

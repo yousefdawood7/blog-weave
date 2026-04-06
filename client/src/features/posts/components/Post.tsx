@@ -12,7 +12,7 @@ import { Spinner } from "@/components/ui/spinner";
 import CommentsList from "@/features/comments/components/CommentsList";
 import { createComment } from "@/features/comments/services/createComment";
 import type { CommentType } from "@/features/posts/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useId, useState } from "react";
 
 type PostProps = {
@@ -23,15 +23,10 @@ type PostProps = {
 
 export default function Post({ id: postID, title, comments }: PostProps) {
   const commentID = useId();
-  const queryClient = useQueryClient();
   const [comment, setComment] = useState<string>("");
 
   const { mutate: createCommentMutation, isPending } = useMutation({
     mutationFn: createComment,
-    onSuccess: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
-      await queryClient.invalidateQueries();
-    },
   });
 
   return (
@@ -50,6 +45,7 @@ export default function Post({ id: postID, title, comments }: PostProps) {
           onSubmit={(e) => {
             e.preventDefault();
             createCommentMutation({ postID, content: comment });
+            setComment("");
           }}
         >
           <p className="flex flex-col gap-2.5">
