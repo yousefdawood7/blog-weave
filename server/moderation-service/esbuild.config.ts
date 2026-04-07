@@ -12,4 +12,4 @@ await esbuild.build({
   outdir: "dist",
 });
 
-console.log("[esbuild] Built query-service");
+console.log("[esbuild] Built moderation-service");
