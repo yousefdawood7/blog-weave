@@ -8,12 +8,11 @@ import eventRouter from "./routes/event.routes";
 const app: Express = express();
 
 app.use(cors());
-
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/posts", postsRouter);
-app.use("/events", eventRouter);
+app.use("/event", eventRouter);
 
 export default app;
