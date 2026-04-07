@@ -49,14 +49,10 @@ export async function handleEvents(
     status: isCommentReject ? "REJECTED" : "APPROVED",
   };
 
-  console.log("WORKED 1");
-
   await axios.post("http://localhost:4005/event", {
     type: "CommentModerated",
     payload: moderatedComment,
   });
-
-  console.log("WORKED 2");
 
   res.status(204).send({ message: "Comment Moderated Successfully" });
 }

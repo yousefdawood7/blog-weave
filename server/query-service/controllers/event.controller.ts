@@ -26,7 +26,6 @@ export function handleCommentCreatedEvent(payload: CommentType) {
   if (!post)
     return false;
 
-  console.log("PAT", payload);
   post.comments.push(payload);
 
   return true;
@@ -89,7 +88,6 @@ export function handleEvents(req: Request, res: Response) {
 
   if (type === "CommentUpdated") {
     const isCommentUpdated = handleCommentUpdated(payload);
-    console.log(isCommentUpdated);
 
     return isCommentUpdated
       ? res.status(200).send({
