@@ -1,7 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 const app = express();
 
