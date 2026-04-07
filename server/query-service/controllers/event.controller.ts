@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import type {
   CommentCreatedEvent,
   CommentType,
+  CommentUpdatedEvent,
   PostCreatedEvent,
 } from "../utils/types";
 import { posts } from "../models/posts.model";
@@ -55,7 +56,10 @@ export function handleCommentUpdated(payload: CommentType) {
 }
 
 export function handleEvents(req: Request, res: Response) {
-  const { type, payload }: PostCreatedEvent | CommentCreatedEvent = req.body;
+  const {
+    type,
+    payload,
+  }: PostCreatedEvent | CommentCreatedEvent | CommentUpdatedEvent = req.body;
 
   if (type === "PostCreated") {
     const isPostCreated = handlePostCreatedEvent(payload);

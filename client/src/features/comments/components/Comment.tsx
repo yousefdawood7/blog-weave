@@ -1,7 +1,7 @@
 type CommentProps = {
   id: string;
   content: string;
-  status: "PENDING" | "APPROVED" | "REJECJTED";
+  status: "PENDING" | "APPROVED" | "REJECTED";
 };
 
 export default function Comment({ status, content }: CommentProps) {
@@ -12,7 +12,7 @@ export default function Comment({ status, content }: CommentProps) {
       </li>
     );
 
-  if (status === "REJECJTED")
+  if (status === "REJECTED")
     return (
       <li className="list-disc text-red-500">This comment has been rejected</li>
     );

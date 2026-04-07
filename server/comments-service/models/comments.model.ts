@@ -2,10 +2,10 @@ export type CommentType = {
   id: string;
   postID: string;
   content: string;
-  status: "PENDING" | "APPROVED" | "REJECJTED";
+  status: "PENDING" | "APPROVED" | "REJECTED";
 };
 
-type CommentsByPostIDType = {
+type CommentsByPostIDType = { 
   [key: string]: CommentType[];
 };
 

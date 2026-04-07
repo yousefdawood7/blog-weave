@@ -5,7 +5,7 @@ type CommentType = {
   id: string;
   postID: string;
   content: string;
-  status: "PENDING" | "APPROVED" | "REJECJTED";
+  status: "PENDING" | "APPROVED" | "REJECTED";
 };
 
 type CommentEventType = {
@@ -46,7 +46,7 @@ export async function handleEvents(
 
   const moderatedComment: CommentType = {
     ...comment,
-    status: isCommentReject ? "REJECJTED" : "APPROVED",
+    status: isCommentReject ? "REJECTED" : "APPROVED",
   };
 
   console.log("WORKED 1");
