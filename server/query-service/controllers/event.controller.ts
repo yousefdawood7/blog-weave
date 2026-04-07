@@ -27,7 +27,6 @@ export function handleCommentCreatedEvent(
 }
 
 export function handleEvents(req: Request, res: Response) {
-  console.log("HI");
   const { type, payload }: PostCreatedEvent | CommentCreatedEvent = req.body;
 
   if (type === "PostCreated") {
