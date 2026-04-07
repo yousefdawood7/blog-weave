@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import type { CommentCreatedEvent, PostCreatedEvent } from "../utils/types";
-import { posts } from "../model/posts.model";
+import { posts } from "../models/posts.model";
 
 export function handlePostCreatedEvent(payload: PostCreatedEvent["payload"]) {
   const post = posts[payload.id];

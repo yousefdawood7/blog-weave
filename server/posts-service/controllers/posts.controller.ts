@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { Request, Response } from "express";
-import posts from "../model/posts.model";
+import posts from "../models/posts.model";
 
 export function getPosts(_req: Request, res: Response) {
   res.status(200).send(posts);
