@@ -1,0 +1,30 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    // "rootDir": "./src",
+    // "outDir": "./dist",
+
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "target": "esnext",
+
+    // For nodejs:
+    "lib": ["esnext"],
+    "types": ["node"],
+    "sourceMap": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  }
+}

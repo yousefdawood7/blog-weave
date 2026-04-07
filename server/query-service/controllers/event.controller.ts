@@ -1,5 +1,10 @@
 import type { Request, Response } from "express";
-import type { CommentCreatedEvent, PostCreatedEvent } from "../utils/types";
+import type {
+  CommentCreatedEvent,
+  CommentType,
+  CommentUpdatedEvent,
+  PostCreatedEvent,
+} from "../utils/types";
 import { posts } from "../models/posts.model";
 
 export function handlePostCreatedEvent(payload: PostCreatedEvent["payload"]) {
@@ -14,20 +19,46 @@ export function handlePostCreatedEvent(payload: PostCreatedEvent["payload"]) {
   return true;
 }
 
-export function handleCommentCreatedEvent(
-  payload: CommentCreatedEvent["payload"],
-) {
+export function handleCommentCreatedEvent(payload: CommentType) {
   const post = posts[payload.postID];
 
-  if (!post) return false;
+  // prettier-ignore
+  if (!post)
+    return false;
 
   post.comments.push(payload);
 
   return true;
 }
 
+export function handleCommentUpdated(payload: CommentType) {
+  const post = posts[payload.postID];
+
+  // prettier-ignore
+  if (!post)
+    return false;
+
+  let moderatedCommentIndex = post.comments.findIndex(
+    (c) => c.id === payload.id,
+  );
+
+  // prettier-ignore
+  if ( moderatedCommentIndex === -1 || !post.comments[moderatedCommentIndex] )
+    return false;
+
+  post.comments[moderatedCommentIndex] = {
+    ...post.comments[moderatedCommentIndex],
+    status: payload.status,
+  };
+
+  return true;
+}
+
 export function handleEvents(req: Request, res: Response) {
-  const { type, payload }: PostCreatedEvent | CommentCreatedEvent = req.body;
+  const {
+    type,
+    payload,
+  }: PostCreatedEvent | CommentCreatedEvent | CommentUpdatedEvent = req.body;
 
   if (type === "PostCreated") {
     const isPostCreated = handlePostCreatedEvent(payload);
@@ -47,7 +78,7 @@ export function handleEvents(req: Request, res: Response) {
     return isCommentCreated
       ? res.status(200).send({
           status: 200,
-          message: "CommentCreated handled Successfully",
+          message: "CommentCreated event handled successfully",
         })
       : res.status(404).send({
           status: 404,
@@ -55,5 +86,19 @@ export function handleEvents(req: Request, res: Response) {
         });
   }
 
-  return res.status(404).send({ status: 404, message: "Unknown Event" });
+  if (type === "CommentUpdated") {
+    const isCommentUpdated = handleCommentUpdated(payload);
+
+    return isCommentUpdated
+      ? res.status(200).send({
+          status: 200,
+          message: "CommentUpdated event handled successfully",
+        })
+      : res.status(404).send({
+          status: 404,
+          message: "There is no post or comment with this ID",
+        });
+  }
+
+  return res.status(204).send({ status: 204, message: "Unknown Event" });
 }

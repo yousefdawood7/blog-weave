@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { Request, Response } from "express";
-import commentsByPostID from "../models/comments.model";
+import commentsByPostID, { type CommentType } from "../models/comments.model";
 
 export function getAllComments(req: Request<{ id: string }>, res: Response) {
   const { id: postID } = req.params;
@@ -8,7 +8,7 @@ export function getAllComments(req: Request<{ id: string }>, res: Response) {
 }
 
 export async function submitComment(
-  req: Request<{ id: string }>,
+  req: Request<{ id: string }, unknown, { content: string }>,
   res: Response,
 ) {
   const { id: postID } = req.params;
@@ -23,12 +23,17 @@ export async function submitComment(
 
   const comments = commentsByPostID[postID] ?? [];
 
-  const newCreatedComment = { id: crypto.randomUUID(), postID, content };
+  const newCreatedComment: CommentType = {
+    id: crypto.randomUUID(),
+    postID,
+    content,
+    status: "PENDING",
+  };
 
   comments.push(newCreatedComment);
   commentsByPostID[postID] = comments;
 
-  await axios.post("http://localhost:4005/event", {
+  axios.post("http://localhost:4005/event", {
     type: "CommentCreated",
     payload: newCreatedComment,
   });

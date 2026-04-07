@@ -1,9 +1,12 @@
-type CommentsByPostIDType = {
-  [key: string]: {
-    id: string;
-    postID: string;
-    content: string;
-  }[];
+export type CommentType = {
+  id: string;
+  postID: string;
+  content: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+};
+
+type CommentsByPostIDType = { 
+  [key: string]: CommentType[];
 };
 
 const commentsByPostID: CommentsByPostIDType = {};

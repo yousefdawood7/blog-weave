@@ -1,0 +1,15 @@
+import * as esbuild from "esbuild";
+
+await esbuild.build({
+  entryPoints: ["server.ts"],
+  bundle: true,
+  platform: "node",
+  target: "node24",
+  format: "esm",
+  resolveExtensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
+  sourcemap: true,
+  packages: "external",
+  outdir: "dist",
+});
+
+console.log("[esbuild] Built moderation-service");

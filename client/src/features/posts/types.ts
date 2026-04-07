@@ -2,6 +2,7 @@ export type CommentType = {
   id: string;
   postID: string;
   content: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
 };
 
 export type PostsType = {

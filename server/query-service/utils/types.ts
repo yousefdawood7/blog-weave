@@ -2,6 +2,7 @@ export type CommentType = {
   id: string;
   postID: string;
   content: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
 };
 
 export type PostsType = {
@@ -14,11 +15,7 @@ export type PostsType = {
 
 export type CommentCreatedEvent = {
   type: "CommentCreated";
-  payload: {
-    id: string;
-    postID: string;
-    content: string;
-  };
+  payload: CommentType;
 };
 
 export type PostCreatedEvent = {
@@ -27,4 +24,9 @@ export type PostCreatedEvent = {
     id: string;
     title: string;
   };
+};
+
+export type CommentUpdatedEvent = {
+  type: "CommentUpdated";
+  payload: CommentType;
 };
