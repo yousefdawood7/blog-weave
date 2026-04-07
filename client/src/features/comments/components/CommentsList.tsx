@@ -18,7 +18,12 @@ export default function CommentsList({
 
       <ul className="pl-8">
         {comments.map((comment) => (
-          <Comment key={comment.id} id={comment.id} content={comment.content} />
+          <Comment
+            key={comment.id}
+            id={comment.id}
+            content={comment.content}
+            status={comment.status}
+          />
         ))}
       </ul>
     </div>
