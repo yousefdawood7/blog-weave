@@ -11,6 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.post("/event", async (req, res) => {
+  console.log(req.body);
   await Promise.all([
     axios.post("http://localhost:4000/event", req.body),
     axios.post("http://localhost:4001/event", req.body),
