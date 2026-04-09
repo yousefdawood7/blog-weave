@@ -32,10 +32,14 @@ export async function handleEvents(
     status: comment.status,
   };
 
-  await axios.post("http://localhost:4005/event", {
-    type: "CommentUpdated",
-    payload: post[moderatedCommentIndex],
-  });
+  axios
+    .post("http://localhost:4005/event", {
+      type: "CommentUpdated",
+      payload: post[moderatedCommentIndex],
+    })
+    .catch((err) => {
+      console.error("Failed to emit CommentUpdated event:", err);
+    });
 
   res.send({ message: "Comment-Service", type: req.body.type });
 }

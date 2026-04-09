@@ -33,7 +33,7 @@ export async function submitComment(
   comments.push(newCreatedComment);
   commentsByPostID[postID] = comments;
 
-  axios.post("http://localhost:4005/event", {
+  await axios.post("http://localhost:4005/event", {
     type: "CommentCreated",
     payload: newCreatedComment,
   });
