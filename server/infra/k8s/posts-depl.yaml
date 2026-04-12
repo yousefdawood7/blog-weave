@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+
+spec:
+  selector:
+    matchLabels:
+      app: posts
+
+  template:
+    metadata:
+      labels:
+        app: posts
+
+    spec:
+      containers:
+        - name: posts
+          image: yousefdawood/posts-service:0.0.1
