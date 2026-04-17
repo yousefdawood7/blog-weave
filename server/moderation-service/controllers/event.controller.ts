@@ -49,7 +49,7 @@ export async function handleEvents(
     status: isCommentReject ? "REJECTED" : "APPROVED",
   };
 
-  await axios.post("http://localhost:4005/event", {
+  await axios.post("http://event-bus-srv:4005/event", {
     type: "CommentModerated",
     payload: moderatedComment,
   });

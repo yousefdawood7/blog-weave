@@ -11,7 +11,7 @@ app.listen(4002, async () => {
   console.log("Server is running on port 4002");
   const events = await axios.get<
     (PostCreatedEvent | CommentCreatedEvent | CommentUpdatedEvent)[]
-  >("http://localhost:4005/event");
+  >("http://event-bus-srv:4005/event");
 
   // prettier-ignore
   for (const event of events.data) 

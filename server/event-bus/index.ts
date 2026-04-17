@@ -23,7 +23,7 @@ app.post("/event", async (req, res) => {
 
   await Promise.all([
     axios.post("http://posts-cluster-ip-srv:4000/event", event),
-    axios.post("http://localhost:4001/event", event),
+    axios.post("http://comments-cluster-ip-srv:4001/event", event),
     axios.post("http://localhost:4002/event", event),
     axios.post("http://localhost:4003/event", event),
   ]);
