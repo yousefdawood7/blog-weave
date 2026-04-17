@@ -1,19 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: comments-depl
+  name: moderation-depl.yaml
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: comments
+      app: moderation
 
   template:
     metadata:
       labels:
-        app: comments
+        app: moderation
+
     spec:
       containers:
-        - name: comments
-          image: yousefdawood7/comments-service
+        - name: moderation
+          image: yousefdawood7/moderation-service
