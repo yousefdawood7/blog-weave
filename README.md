@@ -1,12 +1,14 @@
 <div align="center">
   <h1>Blog Weave</h1>
-  <p>Event-driven microservices demo (Posts + Comments + Query + Event Bus) with a Vite/React client.</p>
+  <p>Event-driven microservices demo (Posts + Comments + Moderation + Query + Event Bus) with a Vite/React client.</p>
 
   <p>
     <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-blue" />
     <img alt="React" src="https://img.shields.io/badge/React-19-61dafb" />
     <img alt="Vite" src="https://img.shields.io/badge/Vite-8-646cff" />
     <img alt="Express" src="https://img.shields.io/badge/Express-5-black" />
+    <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ed?logo=docker&logoColor=white" />
+    <img alt="Kubernetes" src="https://img.shields.io/badge/Kubernetes-326ce5?logo=kubernetes&logoColor=white" />
   </p>
 </div>
 
@@ -14,6 +16,7 @@ An event-driven microservices demo with:
 
 - `server/posts-service/` — Posts service (Express)
 - `server/comments-service/` — Comments service (Express)
+- `server/moderation-service/` — Comment moderation service (Express)
 - `server/query-service/` — Query service for aggregated data (Express)
 - `server/event-bus/` — Event bus for service communication (Express)
 - `client/` — React + Vite UI with TanStack Query
@@ -22,8 +25,10 @@ Each backend service stores data **in memory** (restarts clear data).
 
 ## Prerequisites
 
-- Node.js (this repo works well with modern Node versions; the services run `index.ts` directly)
-- Package manager: `pnpm` for all services and client
+- Node.js
+- Package manager: `pnpm`
+- Docker (optional, for containerized deployment)
+- kubectl (optional, for Kubernetes deployment)
 
 ## Project structure
 
@@ -33,8 +38,11 @@ blog-weave/
   server/
     posts-service/           # Posts microservice
     comments-service/        # Comments microservice
+    moderation-service/      # Moderation microservice
     query-service/           # Query service (aggregates posts + comments)
     event-bus/               # Event bus for inter-service communication
+    infra/
+      k8s/                   # Kubernetes manifests
   docs/
     architecture/            # Architecture diagrams
 ```
@@ -44,10 +52,13 @@ blog-weave/
 ![Services Architecture](docs/architecture/services.png)
 
 The system uses an event-driven architecture where:
-1. **Posts Service** and **Comments Service** emit events (`PostCreated`, `CommentCreated`) to the **Event Bus**
-2. **Event Bus** broadcasts events to all subscribed services
-3. **Query Service** listens for events and maintains an aggregated view of posts with their comments
-4. **Client** fetches data from the Query Service for optimized reads
+
+1. **Posts Service** emits `PostCreated` events to the **Event Bus**.
+2. **Comments Service** emits `CommentCreated` events to the **Event Bus**.
+3. **Moderation Service** listens for `CommentCreated` events, moderates the content, and emits `CommentModerated` events.
+4. **Event Bus** broadcasts events to all subscribed services.
+5. **Query Service** listens for `PostCreated` and `CommentModerated` events to maintain an aggregated view of posts and their approved comments.
+6. **Client** fetches data from the Query Service for optimized reads.
 
 ## Services
 
@@ -55,19 +66,9 @@ The system uses an event-driven architecture where:
 
 - Base URL: `http://localhost:4000`
 - Endpoints:
-  - `GET /posts` — returns all posts (object keyed by post id)
+  - `GET /posts` — returns all posts
   - `POST /posts` — creates a post (emits `PostCreated` event)
   - `POST /event` — receives events from event bus
-
-Example:
-
-```bash
-curl -X POST http://localhost:4000/posts \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Hello"}'
-
-curl http://localhost:4000/posts
-```
 
 ### Comments service (`server/comments-service/`)
 
@@ -77,15 +78,12 @@ curl http://localhost:4000/posts
   - `POST /posts/:id/comments` — creates a comment (emits `CommentCreated` event)
   - `POST /event` — receives events from event bus
 
-Example:
+### Moderation service (`server/moderation-service/`)
 
-```bash
-curl -X POST http://localhost:4001/posts/<POST_ID>/comments \
-  -H "Content-Type: application/json" \
-  -d '{"content":"Nice post"}'
-
-curl http://localhost:4001/posts/<POST_ID>/comments
-```
+- Base URL: `http://localhost:4003` (estimated, check server.ts)
+- Role: Listens for `CommentCreated` events and emits `CommentModerated` with `APPROVED` or `REJECTED` status based on a keyword filter.
+- Endpoints:
+  - `POST /event` — receives events from event bus
 
 ### Query service (`server/query-service/`)
 
@@ -93,12 +91,6 @@ curl http://localhost:4001/posts/<POST_ID>/comments
 - Endpoints:
   - `GET /posts` — returns all posts with their comments (aggregated view)
   - `POST /event` — receives events from event bus
-
-Example:
-
-```bash
-curl http://localhost:4002/posts
-```
 
 ### Event bus (`server/event-bus/`)
 
@@ -108,7 +100,7 @@ curl http://localhost:4002/posts
 
 ## Run locally
 
-> You'll want **5 terminals**: one per service + one for the client.
+> You'll want **6 terminals**: one per service + one for the client.
 
 ### 1) Start `event-bus`
 
@@ -118,8 +110,6 @@ pnpm install
 pnpm start
 ```
 
-Runs on `http://localhost:4005`.
-
 ### 2) Start `posts-service`
 
 ```bash
@@ -127,8 +117,6 @@ cd server/posts-service
 pnpm install
 pnpm start
 ```
-
-Runs on `http://localhost:4000`.
 
 ### 3) Start `comments-service`
 
@@ -138,9 +126,15 @@ pnpm install
 pnpm start
 ```
 
-Runs on `http://localhost:4001`.
+### 4) Start `moderation-service`
 
-### 4) Start `query-service`
+```bash
+cd server/moderation-service
+pnpm install
+pnpm start
+```
+
+### 5) Start `query-service`
 
 ```bash
 cd server/query-service
@@ -148,9 +142,7 @@ pnpm install
 pnpm start
 ```
 
-Runs on `http://localhost:4002`.
-
-### 5) Start the `client`
+### 6) Start the `client`
 
 ```bash
 cd client
@@ -158,7 +150,20 @@ pnpm install
 pnpm dev
 ```
 
-Vite runs on `http://localhost:5173`.
+## Containerization & Deployment
+
+### Docker
+
+Each service includes a `Dockerfile`. You can build and run them using:
+
+```bash
+docker build -t blog-weave-service .
+docker run -p <PORT>:<PORT> blog-weave-service
+```
+
+### Kubernetes
+
+Kubernetes manifests are available in `server/infra/k8s/` for deploying the services to a cluster.
 
 ## Notes
 
