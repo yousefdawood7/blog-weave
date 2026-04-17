@@ -18,7 +18,7 @@ export async function createPost(req: Request, res: Response) {
 
   posts[createdPostID] = { id: createdPostID, title };
 
-  await axios.post("http://localhost:4005/event", {
+  await axios.post("http://event-bus-srv:4005/event", {
     type: "PostCreated",
     payload: posts[createdPostID],
   });
