@@ -33,7 +33,7 @@ export async function handleEvents(
   };
 
   axios
-    .post("http://localhost:4005/event", {
+    .post("http://event-bus-srv:4005/event", {
       type: "CommentUpdated",
       payload: post[moderatedCommentIndex],
     })
