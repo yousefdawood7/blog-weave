@@ -16,5 +16,5 @@ spec:
 
     spec:
       containers:
-        - name: moderation
+        - name: moderation-service
           image: yousefdawood7/moderation-service
