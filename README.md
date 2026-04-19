@@ -64,7 +64,9 @@ The system uses an event-driven architecture where:
 
 ### Posts service (`server/posts-service/`)
 
-- Base URL: `http://localhost:4000`
+- Local URL: `http://localhost:4000`
+- K8s Internal: `http://posts-cluster-ip-srv:4000`
+- K8s NodePort: `30007`
 - Endpoints:
   - `GET /posts` — returns all posts
   - `POST /posts` — creates a post (emits `PostCreated` event)
@@ -72,7 +74,9 @@ The system uses an event-driven architecture where:
 
 ### Comments service (`server/comments-service/`)
 
-- Base URL: `http://localhost:4001`
+- Local URL: `http://localhost:4001`
+- K8s Internal: `http://comments-cluster-ip-srv:4001`
+- K8s NodePort: `30008`
 - Endpoints:
   - `GET /posts/:id/comments` — returns comments for a post
   - `POST /posts/:id/comments` — creates a comment (emits `CommentCreated` event)
@@ -80,21 +84,25 @@ The system uses an event-driven architecture where:
 
 ### Moderation service (`server/moderation-service/`)
 
-- Base URL: `http://localhost:4003` (estimated, check server.ts)
+- Local URL: `http://localhost:4003`
+- K8s Internal: `http://moderation-cluster-ip-srv:4003`
 - Role: Listens for `CommentCreated` events and emits `CommentModerated` with `APPROVED` or `REJECTED` status based on a keyword filter.
 - Endpoints:
   - `POST /event` — receives events from event bus
 
 ### Query service (`server/query-service/`)
 
-- Base URL: `http://localhost:4002`
+- Local URL: `http://localhost:4002`
+- K8s Internal: `http://query-cluster-api-srv:4002`
+- K8s NodePort: `30009`
 - Endpoints:
   - `GET /posts` — returns all posts with their comments (aggregated view)
   - `POST /event` — receives events from event bus
 
 ### Event bus (`server/event-bus/`)
 
-- Base URL: `http://localhost:4005`
+- Local URL: `http://localhost:4005`
+- K8s Internal: `http://event-bus-srv:4005`
 - Endpoints:
   - `POST /event` — receives events and broadcasts to all services
 
@@ -163,10 +171,12 @@ docker run -p <PORT>:<PORT> blog-weave-service
 
 ### Kubernetes
 
-Kubernetes manifests are available in `server/infra/k8s/` for deploying the services to a cluster.
+Full Kubernetes manifests (Deployments and Services) are available in `server/infra/k8s/` for all services.
+
+The services are configured to use ClusterIP for internal communication and NodePort for external access from the client.
 
 ## Notes
 
 - Data is stored in memory (restarting services resets posts/comments).
-- The frontend connects to the Query Service (`http://localhost:4002`) to fetch aggregated posts with comments.
+- The frontend connects to the Query Service to fetch aggregated posts with comments. When running in Kubernetes, the base URL and ports are managed in `client/src/lib/constants.ts`.
 - Start the Event Bus first, then other services, to ensure events are properly routed.
